@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    
+</head>
+<body>
+    <h2>Pie Chart</h2>
+  
+    
+    <div>
+        <label for="countrys">Choose a country:</label>
+        <select name="countrys" id="countrys" onchange="createPieChart()"></select>
+    </div>
+    <div>
+        <label for="years">Select a year:</label>
+         <select name="years" id="years" onchange="createPieChart()"></select>
+    </div>   
+
+  
+    <p id="name"></p>
+    <p id="year"></p>
+    <svg width="1000" height="900"></svg>
+    <script type="module" src="./skripta.js"></script>
+</body>
+
+</html>
