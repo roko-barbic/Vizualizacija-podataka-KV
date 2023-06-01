@@ -1,0 +1,5 @@
+.block {
+    width: 200;
+    height: 50;
+    background: linear-gradient(to bottom, rgba(0, 255, 0, 1), rgba(0, 255, 0, 0));
+  }
