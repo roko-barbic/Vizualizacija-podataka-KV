@@ -6,33 +6,47 @@
     <style type="text/css">
         .leaflet-container{background-color:#c5e8ff;}
     </style>
+    <link rel="stylesheet" href="./style.css">
     
 </head>
 <body>
-    <h2>Pie Chart</h2>
-    <div>
-        <label for="diseases">Select a disease:</label>
-         <select name="diseases" id="diseases" onchange="changeStyleOfMap()"></select>
-    </div> 
-    
-    <div id="map" style="width: 600px; height: 400px"></div>
+    <h2>Cause of Deaths around the World</h2>
+    <div id="slectAndText">
+        <div id="slectsDiv">
+            <div>
+                <label for="diseases">Select a cause of death:</label>
+                 <select name="diseases" id="diseases" onchange="changeStyleOfMap()"></select>
+            </div> 
+            <div>
+                <label for="years">Select a year:</label>
+                 <select name="years" id="years" onchange="createPieChart(); changeStyleOfMap()"></select>
+            </div> 
+            <div>
+                <label for="countrys">Choose a country you want to analyze:</label>
+                <select name="countrys" id="countrys" onchange="createPieChart()"></select>
+            </div>
+        </div>
+        <div id="tekst">
+            <p id="name"></p>
+            <p id="year"></p>
+        </div>
+
+    </div>
+    <b></b>
+    <b></b>
+    <div class="mapAndSvg">
+        <div id="map" style="width: 800px; height: 500px"></div>
+        
+        <div id="pie-container">
+            <svg width="1000" height="900" id="pie"></svg>
+        </div>
+    </div>
 
     <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
     <script src="http://cdn.leafletjs.com/leaflet-0.7.1/leaflet.js"></script>
     
-    <div>
-        <label for="countrys">Choose a country:</label>
-        <select name="countrys" id="countrys" onchange="createPieChart()"></select>
-    </div>
-    <div>
-        <label for="years">Select a year:</label>
-         <select name="years" id="years" onchange="createPieChart(); changeStyleOfMap()"></select>
-    </div>   
-
-  
-    <p id="name">aa</p>
-    <p id="year">aa</p>
-    <svg width="1000" height="900" id="pie"></svg>
+    
+    
     <script type="module" src="./skripta.js" ></script>
 </body>
 

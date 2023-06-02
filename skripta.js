@@ -36,9 +36,19 @@ $.getJSON(myGeoJSONPath,function(data){
             var countryName = feature.properties.name;
             var selectCountry = document.getElementById("countrys");
             selectCountry.value = countryName;
+            //createPieChartbyName(countryName);
+          });
+          layer.on('click', function(event) {
+            var layer = event.target;
+            layer.setStyle({
+              fillOpacity: 1,
+              fillColor: 'red'
+            });
+            var countryName = feature.properties.name;
+            var selectCountry = document.getElementById("countrys");
+            selectCountry.value = countryName;
             createPieChartbyName(countryName);
           });
-          
           layer.on('mouseout', function(event) {
             var layer = event.target;
             layer.setStyle({
@@ -125,6 +135,11 @@ function getOpacity(name){
         
         counter += filteredData[key];
     }
+    let percentValue =filteredData[disease]/counter;
+    /* if(percentValue<=0.1){
+        return filteredData[disease]/counter + 0.15;
+        s ovim bi rijesio problem sto se nikad nis ne vidi
+    } */
     return filteredData[disease]/counter;
 }
 
@@ -215,8 +230,7 @@ window.createPieChart = function() {
     
     function handleMouseOver(d){
         d3.select(this).attr("opacity",0.8);
-        document.getElementById("name").innerHTML = d.data.name;
-        document.getElementById("year").innerHTML = d.data.value;
+        document.getElementById("name").innerHTML = "In "+ country + " in " + year + ", " + d.data.value + " people died from " + d.data.name + ", which accounted for roughly " + getPercent(d).toFixed(4).toString() +"% of all deaths that year";
     }
     function handleMouseOut(d) {
         d3.select(this).attr("opacity", 1); // Restore the original opacity of the slice
@@ -384,6 +398,8 @@ window.createPieChart = function() {
                     break;
                 }
             }
+            console.log(country);
+            console.log(filteredData);
             var counter =0;
             for (let key in filteredData) {
                 
@@ -396,8 +412,7 @@ window.createPieChart = function() {
 
         function handleMouseOver(d){
             d3.select(this).attr("opacity",0.8);
-            document.getElementById("name").innerHTML = d.data.name;
-            document.getElementById("year").innerHTML = d.data.value + " " + getPercent(d).toString() +"%";
+            document.getElementById("name").innerHTML = "In "+ country + " in " + year + ", " + d.data.value + " people died from " + d.data.name + ", which accounted for roughly " + getPercent(d).toFixed(4).toString() +"% of all deaths that year";
         }
         function handleMouseOut(d) {
             d3.select(this).attr("opacity", 1); // Restore the original opacity of the slice
