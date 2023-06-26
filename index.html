@@ -11,34 +11,38 @@
 </head>
 <body>
     <h2>Cause of Deaths around the World</h2>
-    <div id="slectAndText">
-        <div id="slectsDiv">
-            <div>
-                <label for="diseases">Select a cause of death:</label>
-                 <select name="diseases" id="diseases" onchange="changeStyleOfMap()"></select>
-            </div> 
-            <div>
-                <label for="years">Select a year:</label>
-                 <select name="years" id="years" onchange="createPieChart(); changeStyleOfMap()"></select>
-            </div> 
-            <div>
-                <label for="countrys">Choose a country you want to analyze:</label>
-                <select name="countrys" id="countrys" onchange="createPieChart()"></select>
+    <div class="border">
+        <div id="slectAndText">
+            <div style="margin-left: 20px;">
+                
+                <div class="slectsDiv">
+                    <label for="years">Select a year:</label>
+                    <select name="years" id="years" onchange="createPieChart(); changeStyleOfMap()"></select>
+                </div > 
+                <div class="slectsDiv">
+                    <label for="diseases">Select a cause of death:</label>
+                    <select name="diseases" id="diseases" onchange="changeStyleOfMap()"></select>
+                </div>
+                
             </div>
-        </div>
-        <div id="tekst">
-            <p id="name"></p>
-            <p id="year"></p>
-        </div>
+            <div id="map" style="width: 800px; height: 500px"></div>
+           
 
-    </div>
-    <b></b>
-    <b></b>
-    <div class="mapAndSvg">
-        <div id="map" style="width: 800px; height: 500px"></div>
-        
-        <div id="pie-container">
-            <svg width="1000" height="900" id="pie"></svg>
+        </div>
+        <div class="mapAndSvg">
+            <div id="tekst">
+                <div class="slectsDiv">
+                    <label for="countrys">Choose a country you want to analyze:</label>
+                    <select name="countrys" id="countrys" onchange="createPieChart()"></select>
+                </div>
+                <h3 id="country"></h3>
+                <p id="name"></p>
+                <p id="year"></p>
+            </div>
+            
+            <div id="pie-container">
+                <svg width="1000" height="900" id="pie"></svg>
+            </div>
         </div>
     </div>
 

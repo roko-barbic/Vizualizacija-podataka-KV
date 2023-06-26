@@ -30,30 +30,32 @@ $.getJSON(myGeoJSONPath,function(data){
           layer.on('mouseover', function(event) {
             var layer = event.target;
             layer.setStyle({
-              fillOpacity: 0.8,
-              fillColor: 'green'
+              fillOpacity: 0.55,
+              fillColor: 'red'
             });
             var countryName = feature.properties.name;
-            var selectCountry = document.getElementById("countrys");
-            selectCountry.value = countryName;
+            // var selectCountry = document.getElementById("countrys");
+            // selectCountry.value = countryName;
             //createPieChartbyName(countryName);
           });
           layer.on('click', function(event) {
             var layer = event.target;
             layer.setStyle({
-              fillOpacity: 1,
-              fillColor: 'red'
+              fillOpacity: 0.85,
+              fillColor: 'green'
             });
             var countryName = feature.properties.name;
             var selectCountry = document.getElementById("countrys");
             selectCountry.value = countryName;
+            document.getElementById("country").innerHTML = countryName;
+            document.getElementById("name").innerHTML ="";
             createPieChartbyName(countryName);
           });
           layer.on('mouseout', function(event) {
             var layer = event.target;
             layer.setStyle({
               fillOpacity: getOpacity(feature.properties.name),
-              fillColor: 'green'
+              fillColor: 'red'
             });
         
           });
@@ -72,27 +74,13 @@ window.changeStyleOfMap= function(){
                 color: 'black', 
                 weight: 0.5, 
                 fill: true,
-                fillColor: 'green',
+                fillColor: 'red',
                 fillOpacity: getOpacity(feature.properties.name)
             });
         });
     }
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 // Step 3
@@ -142,7 +130,7 @@ function getOpacity(name){
     } */
     return filteredData[disease]/counter;
 }
-
+/* 
 
 window.createPieChart = function() { 
     var data33 = data3;
@@ -151,6 +139,7 @@ window.createPieChart = function() {
  //   function createPieChart(){
     var country = document.getElementById("countrys").value;
     var year = document.getElementById("years").value;
+    document.getElementById("country").innerHTML=country;
     //document.getElementById("demo").innerHTML = year + " " + country;
     
     //console.log(data3);
@@ -171,6 +160,253 @@ window.createPieChart = function() {
     }
 
        // var drowningValue = filteredData["Drowning"];
+        const chartData = Object.entries(filteredData).map(([category, value]) => ({ name: category, value }));
+
+        const width = 500;
+    const height = 500;
+    const radius = Math.min(width, height) / 2;
+    const labelRadius = radius + 150;
+    const colors = ['#ffd384','#94ebcd','#fbaccc','#d3e0ea','#fa7f72',
+    '#23E1AE','#198064','#074E3B','#07474E','#0497A7',
+    '#05C6DB','#48E7F9','#48F9E0','#0BD0B4','#05AC70',
+    '#04DF91','#4C9009','#66C508','#95ED3D','#D2ED3D',
+    '#9CB609','#6C7E08','#985D05','#D48A1D','#E9B262',
+    '#EC5424','#8F2605','#986657','#3C1B93','#A546AB',
+    '#8D1A55'];
+    // Create the SVG element
+    
+
+    const svg = d3.select("#pie")
+  .append("svg")
+  .attr("width", width)
+  .attr("height", height)
+  .append("g")
+  .attr("transform", `translate(${width / 2}, ${height / 2})`);
+
+    // Define the pie layout
+    const pie = d3.pie()
+      .value(d => d.value);
+
+    // Define the arc shape
+    const arc = d3.arc()
+      .innerRadius(0)
+      .outerRadius(radius);
+
+    // Generate the pie slices
+    const slices = svg.selectAll("path")
+      .data(pie(chartData))
+      .enter()
+      .append("path")
+      .attr("d", arc)
+      .on("mouseover", handleMouseOver)
+      .on("mouseout", handleMouseOut)
+      .attr("fill", (d, i) => colors[i]); // Use different colors for each slice
+
+    // Add labels to the slices
+    const labels = svg.selectAll("text")
+      .data(pie(chartData))
+      .enter()
+      .append("text")
+      .attr("transform", d => {
+        const centroid = arc.centroid(d);
+        const x = centroid[0] * labelRadius / radius;
+        const y = centroid[1] * labelRadius / radius;
+        return `translate(${x}, ${y})`;
+      })
+      .attr("dy", "0.35em")
+      .attr("text-anchor", "middle")
+      .text(d => d.data.name);
+    
+      function getPercent(d){
+        var country = document.getElementById("countrys").value;
+        var year = document.getElementById("years").value;
+
+        var filteredData=[];
+        console.log(d.data.name);
+        for (let i = 0; i < data3.length; i++) {
+            let item = data3[i];
+            if (item["Country/Territory"] === country && item["Year"] === parseInt(year)) {
+                
+                filteredData = Object.assign({}, item);
+                delete filteredData["Year"];
+                delete filteredData["Country/Territory"];
+                delete filteredData["Code"];
+    
+                break;
+            }
+        }
+        console.log(country);
+        console.log(filteredData);
+        var counter =0;
+        for (let key in filteredData) {
+            
+            counter += filteredData[key];
+        }
+        console.log(counter+ " "+ d.data.value);
+        console.log((d.data.value/counter)*100);
+        return (d.data.value/counter)*100;
+    }
+
+    function handleMouseOver(d){
+        d3.select(this).attr("opacity",0.8);
+        document.getElementById("name").innerHTML = "In "+ country + " in " + year + ", " + d.data.value + " people died from " + d.data.name + ", which accounted for roughly " + getPercent(d).toFixed(4).toString() +"% of all deaths that year";
+    }
+    function handleMouseOut(d) {
+        d3.select(this).attr("opacity", 1); 
+    }
+      
+
+    }
+
+ */window.createPieChart = function() {
+  var data33 = data3;
+  const svg2 = d3.select("#pie");
+  svg2.selectAll("*").remove();
+
+  var country = document.getElementById("countrys").value;
+  var year = document.getElementById("years").value;
+  document.getElementById("country").innerHTML = country;
+  document.getElementById("name").innerHTML="";
+
+  var filteredData = [];
+
+  for (let i = 0; i < data33.length; i++) {
+    let item = data33[i];
+    if (item["Country/Territory"] === country && item["Year"] === parseInt(year)) {
+      filteredData = Object.assign({}, item);
+      delete filteredData["Year"];
+      break;
+    }
+  }
+
+  const chartData = Object.entries(filteredData).map(([category, value]) => ({ name: category, value }));
+
+  const width = 500;
+  const height = 500;
+  const radius = Math.min(width, height) / 2;
+  const labelRadius = radius + 150;
+  const colors = ['#ffd384', '#94ebcd', '#fbaccc', '#d3e0ea', '#fa7f72', '#23E1AE', '#198064', '#074E3B', '#07474E', '#0497A7', '#05C6DB', '#48E7F9', '#48F9E0', '#0BD0B4', '#05AC70', '#04DF91', '#4C9009', '#66C508', '#95ED3D', '#D2ED3D', '#9CB609', '#6C7E08', '#985D05', '#D48A1D', '#E9B262', '#EC5424', '#8F2605', '#986657', '#3C1B93', '#A546AB', '#8D1A55'];
+
+  const svg = d3.select("#pie")
+    .append("svg")
+    .attr("width", width)
+    .attr("height", height)
+    .append("g")
+    .attr("transform", `translate(${width / 2}, ${height / 2})`);
+
+  const pie = d3.pie()
+    .value(d => d.value);
+
+  const arc = d3.arc()
+    .innerRadius(0)
+    .outerRadius(radius);
+
+  const slices = svg.selectAll("path")
+    .data(pie(chartData))
+    .enter()
+    .append("path")
+    .attr("fill", (d, i) => colors[i]) // Use different colors for each slice
+    .on("mouseover", handleMouseOver)
+    .on("mouseout", handleMouseOut)
+    .each(function(d, i) {
+      const slice = d3.select(this);
+      slice.transition() // Add transition
+        .delay(i * 200) // Delay creation of each slice
+        .duration(500) // Set animation duration
+        .attrTween("d", function() {
+          const interpolate = d3.interpolate({ startAngle: 0, endAngle: 0 }, d); // Start from 0 angle
+          return function(t) {
+            return arc(interpolate(t));
+          };
+        });
+    });
+
+  const labels = svg.selectAll("text")
+    .data(pie(chartData))
+    .enter()
+    .append("text")
+    .attr("transform", d => {
+      const centroid = arc.centroid(d);
+      const x = centroid[0] * labelRadius / radius;
+      const y = centroid[1] * labelRadius / radius;
+      return `translate(${x}, ${y})`;
+    })
+    .attr("dy", "0.35em")
+    .attr("text-anchor", "middle")
+    .text(d => d.data.name)
+    .style("opacity", 0) // Set initial opacity to 0
+    .each(function(d, i) {
+      const label = d3.select(this);
+      label.transition() // Add transition
+        .delay(i * 200) // Delay creation of each label (same as the slices)
+        .duration(500) // Set animation duration
+        .style("opacity", 1); // Fade in the labels
+    });
+    function getPercent(d){
+      var country = document.getElementById("countrys").value;
+      var year = document.getElementById("years").value;
+
+      var filteredData=[];
+      console.log(d.data.name);
+      for (let i = 0; i < data3.length; i++) {
+          let item = data3[i];
+          if (item["Country/Territory"] === country && item["Year"] === parseInt(year)) {
+              
+              filteredData = Object.assign({}, item);
+              delete filteredData["Year"];
+              delete filteredData["Country/Territory"];
+              delete filteredData["Code"];
+  
+              break;
+          }
+      }
+      console.log(country);
+      console.log(filteredData);
+      var counter =0;
+      for (let key in filteredData) {
+          
+          counter += filteredData[key];
+      }
+      console.log(counter+ " "+ d.data.value);
+      console.log((d.data.value/counter)*100);
+      return (d.data.value/counter)*100;
+  }
+
+  function handleMouseOver(d){
+      d3.select(this).attr("opacity",0.8);
+      document.getElementById("name").innerHTML = "In "+ country + " in " + year + ", " + d.data.value + " people died from " + d.data.name + ", which accounted for roughly " + getPercent(d).toFixed(4).toString() +"% of all deaths that year";
+  }
+  function handleMouseOut(d) {
+      d3.select(this).attr("opacity", 1); 
+  }
+    
+};
+
+    
+
+
+/* 
+
+window.createPieChartbyName = function(name) { 
+    var data33 = data3;
+    const svg2 = d3.select("#pie");   
+    svg2.selectAll("*").remove();
+    var year = document.getElementById("years").value;
+    document.getElementById("countrys").value = name;
+    var country = name;
+
+    var filteredData=[];
+
+    for (let i = 0; i < data33.length; i++) {
+        let item = data33[i];
+        if (item["Country/Territory"] === name && item["Year"] === parseInt(year)) {
+            
+            filteredData = Object.assign({}, item);;
+            delete filteredData["Year"];
+            break;
+        }
+    }
+        // var drowningValue = filteredData["Drowning"];
         const chartData = Object.entries(filteredData).map(([category, value]) => ({ name: category, value }));
 
         const width = 500;
@@ -226,252 +462,217 @@ window.createPieChart = function() {
       })
       .attr("dy", "0.35em")
       .attr("text-anchor", "middle")
-      .text(d => d.data.name);
+      .text(d => d.data.name); 
+
+  //         const labelLines = svg.selectAll("line")
+  // .data(pie(chartData))
+  // .enter()
+  // .append("line")
+  // .attr("x1", d => {
+  //   const centroid = arc.centroid(d);
+  //   const midAngle = Math.atan2(centroid[1], centroid[0]);
+  //   return Math.cos(midAngle) * radius * 0.9;
+  // })
+  // .attr("y1", d => {
+  //   const centroid = arc.centroid(d);
+  //   const midAngle = Math.atan2(centroid[1], centroid[0]);
+  //   return Math.sin(midAngle) * radius * 0.9;
+  // })
+  // .attr("x2", d => {
+  //   const centroid = arc.centroid(d);
+  //   const midAngle = Math.atan2(centroid[1], centroid[0]);
+  //   return Math.cos(midAngle) * radius * 1.1;
+  // })
+  // .attr("y2", d => {
+  //   const centroid = arc.centroid(d);
+  //   const midAngle = Math.atan2(centroid[1], centroid[0]);
+  //   return Math.sin(midAngle) * radius * 1.1;
+  // })
+  // .attr("stroke", "black");
+
+  // const labelLabels = svg.selectAll("text")
+  // .data(pie(chartData))
+  // .enter()
+  // .append("text")
+  // .attr("x", d => {
+  //   const centroid = arc.centroid(d);
+  //   const midAngle = Math.atan2(centroid[1], centroid[0]);
+  //   return Math.cos(midAngle) * radius * 1.2;
+  // })
+  // .attr("y", d => {
+  //   const centroid = arc.centroid(d);
+  //   const midAngle = Math.atan2(centroid[1], centroid[0]);
+  //   return Math.sin(midAngle) * radius * 1.2;
+  // })
+  // .text(d => d.data.name)
+  // .attr("text-anchor", d => {
+  //   const centroid = arc.centroid(d);
+  //   const midAngle = Math.atan2(centroid[1], centroid[0]);
+  //   return (Math.cos(midAngle) * radius > 0) ? "start" : "end";
+  // })
+  // .attr("alignment-baseline", "middle");
+
+        
+
+    function getPercent(d){
+        var country = document.getElementById("countrys").value;
+        var year = document.getElementById("years").value;
+
+        var filteredData=[];
+        console.log(d.data.name);
+        for (let i = 0; i < data3.length; i++) {
+            let item = data3[i];
+            if (item["Country/Territory"] === country && item["Year"] === parseInt(year)) {
+                
+                filteredData = Object.assign({}, item);
+                delete filteredData["Year"];
+                delete filteredData["Country/Territory"];
+                delete filteredData["Code"];
     
+                break;
+            }
+        }
+        console.log(country);
+        console.log(filteredData);
+        var counter =0;
+        for (let key in filteredData) {
+            
+            counter += filteredData[key];
+        }
+        console.log(counter+ " "+ d.data.value);
+        console.log((d.data.value/counter)*100);
+        return (d.data.value/counter)*100;
+    }
+
     function handleMouseOver(d){
         d3.select(this).attr("opacity",0.8);
         document.getElementById("name").innerHTML = "In "+ country + " in " + year + ", " + d.data.value + " people died from " + d.data.name + ", which accounted for roughly " + getPercent(d).toFixed(4).toString() +"% of all deaths that year";
     }
     function handleMouseOut(d) {
-        d3.select(this).attr("opacity", 1); // Restore the original opacity of the slice
-        
-        // Clear the displayed data
-        //document.getElementById("name").innerHTML = "";
-        //document.getElementById("year").innerHTML = "";
+        d3.select(this).attr("opacity", 1); 
     }
       
 
     
-    /* var g = svg.append("g")
-    .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+}
+     */
 
-    // Step 4
-    var ordScale = d3.scaleOrdinal()
-            .domain(data3)
-            .range(['#ffd384','#94ebcd','#fbaccc','#d3e0ea','#fa7f72',
-                    '#23E1AE','#198064','#074E3B','#07474E','#0497A7',
-                    '#05C6DB','#48E7F9','#48F9E0','#0BD0B4','#05AC70',
-                    '#04DF91','#4C9009','#66C508','#95ED3D','#D2ED3D',
-                    '#9CB609','#6C7E08','#985D05','#D48A1D','#E9B262',
-                    '#EC5424','#8F2605','#986657','#3C1B93','#A546AB',
-                    '#8D1A55']);
+window.createPieChartbyName = function(name) {
+  var data33 = data3;
+  const svg2 = d3.select("#pie");
+  svg2.selectAll("*").remove();
+  var year = document.getElementById("years").value;
+  document.getElementById("countrys").value = name;
+  var country = name;
 
-    // Step 5
-    var pie = d3.pie().value(function(d) { 
-    return d.Malaria; 
+  var filteredData = [];
+
+  for (let i = 0; i < data33.length; i++) {
+    let item = data33[i];
+    if (item["Country/Territory"] === name && item["Year"] === parseInt(year)) {
+
+      filteredData = Object.assign({}, item);;
+      delete filteredData["Year"];
+      break;
+    }
+  }
+  const chartData = Object.entries(filteredData).map(([category, value]) => ({ name: category, value }));
+
+  const width = 500;
+  const height = 500;
+  const radius = Math.min(width, height) / 2;
+  const labelRadius = radius + 150 +30;
+  const colors = ['#ffd384', '#94ebcd', '#fbaccc', '#d3e0ea', '#fa7f72', '#23E1AE', '#198064', '#074E3B', '#07474E', '#0497A7', '#05C6DB', '#48E7F9', '#48F9E0', '#0BD0B4', '#05AC70', '#04DF91', '#4C9009', '#66C508', '#95ED3D', '#D2ED3D', '#9CB609', '#6C7E08', '#985D05', '#D48A1D', '#E9B262', '#EC5424', '#8F2605', '#986657', '#3C1B93', '#A546AB', '#8D1A55'];
+
+  const svg = d3.select("#pie")
+    .append("svg")
+    .attr("width", width)
+    .attr("height", height)
+    .append("g")
+    .attr("transform", `translate(${width / 2}, ${height / 2})`);
+
+  const pie = d3.pie()
+    .value(d => d.value);
+
+  const arc = d3.arc()
+    .innerRadius(0)
+    .outerRadius(radius);
+
+  const slices = svg.selectAll("path")
+    .data(pie(chartData))
+    .enter()
+    .append("path")
+    .attr("fill", (d, i) => colors[i]) // Use different colors for each slice
+    .on("mouseover", handleMouseOver)
+    .on("mouseout", handleMouseOut)
+    .each(function(d, i) {
+      const slice = d3.select(this);
+      slice.transition() // Add transition
+        .delay(i * 200) // Delay creation of each slice
+        .duration(500) // Set animation duration
+        .attrTween("d", function() {
+          const interpolate = d3.interpolate({ startAngle: 0, endAngle: 0 }, d); // Start from 0 angle
+          return function(t) {
+            return arc(interpolate(t));
+          };
+        });
     });
 
-    var arc = g.selectAll("arc")
-    .data(pie(data))
-    .enter();
-
-    // Step 6
-    var path = d3.arc()
-        .outerRadius(radius)
-        .innerRadius(0);
-
-    arc.append("path")
-    .attr("d", path)
-    .attr("fill", function(d) { return ordScale(d.data.Malaria); });
-
-    // Step 7
-    var label = d3.arc()
-        .outerRadius(radius)
-        .innerRadius(0);
-
-    arc.append("text")
-    .attr("transform", function(d) { 
-    return "translate(" + label.centroid(d) + ")"; 
+  const labels = svg.selectAll("text")
+    .data(pie(chartData))
+    .enter()
+    .append("text")
+    .attr("transform", d => {
+      const centroid = arc.centroid(d);
+      const x = centroid[0] * labelRadius / radius;
+      const y = centroid[1] * labelRadius / radius;
+      return `translate(${x}, ${y})`;
     })
-    .text(function(d) { return d.data.Malaria; })
-    .style("font-family", "arial")
-    .style("font-size", 15);
-    */
+    .attr("dy", "0.35em")
+    .attr("text-anchor", "middle")
+    .text(d => d.data.name)
+    .style("opacity", 0) // Set initial opacity to 0
+    .each(function(d, i) {
+      const label = d3.select(this);
+      label.transition() // Add transition
+        .delay(i * 200) // Delay creation of each label (same as the slices)
+        .duration(500) // Set animation duration
+        .style("opacity", 1); // Fade in the labels
+    });
+
+  function getPercent(d) {
+    var country = document.getElementById("countrys").value;
+    var year = document.getElementById("years").value;
+
+    var filteredData = [];
+    for (let i = 0; i < data3.length; i++) {
+      let item = data3[i];
+      if (item["Country/Territory"] === country && item["Year"] === parseInt(year)) {
+        filteredData = Object.assign({}, item);
+        delete filteredData["Year"];
+        delete filteredData["Country/Territory"];
+        delete filteredData["Code"];
+        break;
+      }
     }
 
+    var counter = 0;
+    for (let key in filteredData) {
+      counter += filteredData[key];
+    }
 
+    return (d.data.value / counter) * 100;
+  }
 
+  function handleMouseOver(d) {
+    d3.select(this).attr("opacity", 0.8);
+    document.getElementById("name").innerHTML = "In " + country + " in " + year + ", " + d.data.value + " people died from " + d.data.name + ", which accounted for roughly " + getPercent(d).toFixed(4).toString() + "% of all deaths that year";
+  }
 
-
-
-    window.createPieChartbyName = function(name) { 
-        var data33 = data3;
-        const svg2 = d3.select("#pie");   
-        svg2.selectAll("*").remove();
-     //   function createPieChart(){
-        //var country = document.getElementById("countrys").value;
-        //country.value = name;
-        var year = document.getElementById("years").value;
-        var country = name;
-        //document.getElementById("demo").innerHTML = year + " " + country;
-        
-        //console.log(data3);
-       
-    
-        // var filteredData = data3.filter(function(item) {
-        //     return item["Country/Territory"] === country && item["Year"] === parseInt(year);
-        // });
-        var filteredData=[];
-    
-        for (let i = 0; i < data33.length; i++) {
-            let item = data33[i];
-            if (item["Country/Territory"] === name && item["Year"] === parseInt(year)) {
-                
-                filteredData = Object.assign({}, item);;
-                delete filteredData["Year"];
-                break;
-            }
-        }
-           // var drowningValue = filteredData["Drowning"];
-            const chartData = Object.entries(filteredData).map(([category, value]) => ({ name: category, value }));
-    
-            const width = 500;
-        const height = 500;
-        const radius = Math.min(width, height) / 2;
-        const labelRadius = radius + 150;
-        const colors = ['#ffd384','#94ebcd','#fbaccc','#d3e0ea','#fa7f72',
-        '#23E1AE','#198064','#074E3B','#07474E','#0497A7',
-        '#05C6DB','#48E7F9','#48F9E0','#0BD0B4','#05AC70',
-        '#04DF91','#4C9009','#66C508','#95ED3D','#D2ED3D',
-        '#9CB609','#6C7E08','#985D05','#D48A1D','#E9B262',
-        '#EC5424','#8F2605','#986657','#3C1B93','#A546AB',
-        '#8D1A55'];
-        // Create the SVG element
-        
-    
-        const svg = d3.select("#pie")
-          .append("svg")
-          .attr("width", width)
-          .attr("height", height)
-          .append("g")
-          .attr("transform", `translate(${width / 2}, ${height / 2})`);
-    
-        // Define the pie layout
-        const pie = d3.pie()
-          .value(d => d.value);
-    
-        // Define the arc shape
-        const arc = d3.arc()
-          .innerRadius(0)
-          .outerRadius(radius);
-    
-        // Generate the pie slices
-        const slices = svg.selectAll("path")
-          .data(pie(chartData))
-          .enter()
-          .append("path")
-          .attr("d", arc)
-          .on("mouseover", handleMouseOver)
-          .on("mouseout", handleMouseOut)
-          .attr("fill", (d, i) => colors[i]); // Use different colors for each slice
-    
-        // Add labels to the slices
-        const labels = svg.selectAll("text")
-          .data(pie(chartData))
-          .enter()
-          .append("text")
-          .attr("transform", d => {
-            const centroid = arc.centroid(d);
-            const x = centroid[0] * labelRadius / radius;
-            const y = centroid[1] * labelRadius / radius;
-            return `translate(${x}, ${y})`;
-          })
-          .attr("dy", "0.35em")
-          .attr("text-anchor", "middle")
-          .text(d => d.data.name);
-
-        function getPercent(d){
-            var country = document.getElementById("countrys").value;
-            var year = document.getElementById("years").value;
-
-            var filteredData=[];
-            console.log(d.data.name);
-            for (let i = 0; i < data3.length; i++) {
-                let item = data3[i];
-                if (item["Country/Territory"] === country && item["Year"] === parseInt(year)) {
-                    
-                    filteredData = Object.assign({}, item);
-                    delete filteredData["Year"];
-                    delete filteredData["Country/Territory"];
-                    delete filteredData["Code"];
-        
-                    break;
-                }
-            }
-            console.log(country);
-            console.log(filteredData);
-            var counter =0;
-            for (let key in filteredData) {
-                
-                counter += filteredData[key];
-            }
-            console.log(counter+ " "+ d.data.value);
-            console.log((d.data.value/counter)*100);
-            return (d.data.value/counter)*100;
-        }
-
-        function handleMouseOver(d){
-            d3.select(this).attr("opacity",0.8);
-            document.getElementById("name").innerHTML = "In "+ country + " in " + year + ", " + d.data.value + " people died from " + d.data.name + ", which accounted for roughly " + getPercent(d).toFixed(4).toString() +"% of all deaths that year";
-        }
-        function handleMouseOut(d) {
-            d3.select(this).attr("opacity", 1); // Restore the original opacity of the slice
-            
-            // Clear the displayed data
-            //document.getElementById("name").innerHTML = "";
-            //document.getElementById("year").innerHTML = "";
-        }
-          
-    
-        
-        /* var g = svg.append("g")
-        .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
-    
-        // Step 4
-        var ordScale = d3.scaleOrdinal()
-                .domain(data3)
-                .range(['#ffd384','#94ebcd','#fbaccc','#d3e0ea','#fa7f72',
-                        '#23E1AE','#198064','#074E3B','#07474E','#0497A7',
-                        '#05C6DB','#48E7F9','#48F9E0','#0BD0B4','#05AC70',
-                        '#04DF91','#4C9009','#66C508','#95ED3D','#D2ED3D',
-                        '#9CB609','#6C7E08','#985D05','#D48A1D','#E9B262',
-                        '#EC5424','#8F2605','#986657','#3C1B93','#A546AB',
-                        '#8D1A55']);
-    
-        // Step 5
-        var pie = d3.pie().value(function(d) { 
-        return d.Malaria; 
-        });
-    
-        var arc = g.selectAll("arc")
-        .data(pie(data))
-        .enter();
-    
-        // Step 6
-        var path = d3.arc()
-            .outerRadius(radius)
-            .innerRadius(0);
-    
-        arc.append("path")
-        .attr("d", path)
-        .attr("fill", function(d) { return ordScale(d.data.Malaria); });
-    
-        // Step 7
-        var label = d3.arc()
-            .outerRadius(radius)
-            .innerRadius(0);
-    
-        arc.append("text")
-        .attr("transform", function(d) { 
-        return "translate(" + label.centroid(d) + ")"; 
-        })
-        .text(function(d) { return d.data.Malaria; })
-        .style("font-family", "arial")
-        .style("font-size", 15);
-        */
-        }
-    
-
+  function handleMouseOut(d) {
+    d3.select(this).attr("opacity", 1);
+  }
+};
 
 
 

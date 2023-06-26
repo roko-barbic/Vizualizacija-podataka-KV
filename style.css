@@ -17,21 +17,67 @@
     pointer-events: none;
   }
   .mapAndSvg {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
     grid-gap: 20px;
   }
   #slectAndText{
+    display: flex;
+    flex-direction: column;
+    grid-gap: 20px;
+    margin: 20px;
+  }
+  
+ 
+  #tekst{
+    height: 140px;
+    max-width: 85%;
+  }
+  #pie-container {
+    margin-left: 5%;
+    width: 600px; /* Adjust the width as needed */
+  height: 600px; /* Adjust the height as needed */
+  }
+  #pie{
+    margin-left: 50px;
+    font-family: 'Times New Roman', Times, serif;
+  }
+ 
+  h2{
+    font-size: 40px;
+    text-align: center;
+    justify-content: center;
+  }
+
+  .border {
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-gap: 20px;
-  }
-  #tekst{
-    position: relative;
+    border: 10px solid #ccc;
+    border-radius: 12px;
+    border-color: black;
+    margin: 30px;
+    margin-top: 15px;
+    overflow: hidden;
+    max-height: 80vh;
+    background-color: #F0EAC4;
   }
   
-  #pie-container {
+  .slectsDiv{
+   margin-bottom: 10px;
+  }
+
+  #map{
+    background-color: white;
     margin-left: 20px;
+    border: 1px solid #ccc;
+    border-radius: 12px;
+    border-color: black;
   }
   
+  body {
+    background-color: #A19E8E;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  }
   
