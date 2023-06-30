@@ -275,6 +275,8 @@ window.createPieChart = function() {
     if (item["Country/Territory"] === country && item["Year"] === parseInt(year)) {
       filteredData = Object.assign({}, item);
       delete filteredData["Year"];
+      delete filteredData["Country/Territory"];
+      delete filteredData["Code"];
       break;
     }
   }
@@ -428,6 +430,8 @@ window.createPieChartbyName = function(name) {
 
       filteredData = Object.assign({}, item);;
       delete filteredData["Year"];
+      delete filteredData["Country/Territory"];
+      delete filteredData["Code"];
       break;
     }
   }
