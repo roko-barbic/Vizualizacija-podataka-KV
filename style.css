@@ -81,3 +81,19 @@
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
   }
   
+  .legendDiv{
+    margin-left: 20px;
+  }
+
+  .legend {
+    display: inline-block;
+    margin-right: 10px;
+  }
+
+  .legend-color {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    margin-right: 5px;
+    border: 1px solid #000;
+  }
