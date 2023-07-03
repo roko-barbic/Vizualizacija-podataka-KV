@@ -35,12 +35,13 @@
     max-width: 85%;
   }
   #pie-container {
-    margin-left: 5%;
-    width: 600px; /* Adjust the width as needed */
+    
+    width: 600px; /* Adjust the width as needed 
+    margin-left: 5%;*/
   height: 600px; /* Adjust the height as needed */
   }
   #pie{
-    margin-left: 50px;
+    /*margin-left: 50px;*/
     font-family: 'Times New Roman', Times, serif;
   }
  
@@ -96,4 +97,9 @@
     height: 20px;
     margin-right: 5px;
     border: 1px solid #000;
+  }
+  #playButton{
+    border: 1px solid #ccc;
+    border-radius: 12px;
+    border-color: black;
   }

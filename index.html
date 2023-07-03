@@ -17,12 +17,14 @@
                 
                 <div class="slectsDiv">
                     <label for="years">Select a year:</label>
-                    <select name="years" id="years" onchange="createPieChart(); changeStyleOfMap()"></select>
+                    <select name="years" id="years" onchange="createBarChart(); changeStyleOfMap()"></select>
                 </div > 
                 <div class="slectsDiv">
                     <label for="diseases">Select a cause of death:</label>
                     <select name="diseases" id="diseases" onchange="changeStyleOfMap()"></select>
                 </div>
+                
+                <button id="playButton">Play</button>
                 
             </div>
             <div id="map" style="width: 800px; height: 500px"></div>
@@ -47,6 +49,10 @@
                   <div class="legend-color" style="background-color:  white; opacity: 1;"></div>
                   0%
                 </div>
+                <div class="legend">
+                    <div class="legend-color" style="background-color:  black; opacity: 1;"></div>
+                    No data
+                </div>
             </div>
            
 
@@ -55,7 +61,7 @@
             <div id="tekst">
                 <div class="slectsDiv">
                     <label for="countrys">Choose a country you want to analyze:</label>
-                    <select name="countrys" id="countrys" onchange="createPieChart()"></select>
+                    <select name="countrys" id="countrys" onchange="createBarChart()"></select>
                 </div>
                 <h3 id="country"></h3>
                 <p id="name"></p>
