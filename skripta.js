@@ -291,7 +291,7 @@ window.createPieChart = function() {
 };
 
  */   
-
+/* Za kreiranje pie charta uz pomoc imena
 window.createPieChartbyName = function(name) {
   var data33 = data3;
   const svg2 = d3.select("#pie");
@@ -438,7 +438,7 @@ window.createPieChartbyName = function(name) {
   }
 };
 
-
+*/
 
 
 // Dohvacanje drzava za select drzave
@@ -738,6 +738,7 @@ for (let key in arrayOfDiseases) {
       document.getElementById("years").value = year;
       document.getElementById("playButton").textContent = "Play";
       isPlaying = false;
+      changeStyleOfMap(); 
       return;
     }
   
